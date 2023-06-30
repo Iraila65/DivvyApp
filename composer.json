@@ -1,0 +1,24 @@
+{
+    "name": "irenedelasheras/divvyapp",
+    "description": "DivvyApp PHP, MVC, SQL, BEM, SASS",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "MVC\\" : "./",
+            "Controllers\\" : "./controllers",
+            "Model\\" : "./models",
+            "Classes\\" : "./classes"
+        }
+    },
+    "authors": [
+        {
+            "name": "Irene",
+            "email": "irene.heras.rubio@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.5",
+        "vlucas/phpdotenv": "^4.3",
+        "intervention/image": "^2.7"
+    }
+}
