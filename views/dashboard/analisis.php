@@ -9,10 +9,11 @@
             <?php include_once __DIR__."/../templates/alertas.php"; ?>
 
             <div class="dashboard__grafica">
-                <canvas id="grafica-gastos"></canvas>
-                <canvas id="grafica-gastos-pagador"></canvas>
-                <canvas id="grafica-total-miembros"></canvas>
-                <canvas id="grafica-miembros-conceptos"></canvas>
+                <canvas id="grafica-totales-categoria"></canvas>
+                <canvas id="grafica-totales-miembros"></canvas>
+
+                <canvas id="grafica-desglose-miembro"></canvas>
+                <canvas id="grafica-desglose-categoria"></canvas>
             </div>
 
         </div>

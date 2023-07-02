@@ -199,10 +199,25 @@ class APImovimientos {
                 echo json_encode($respuesta);   
             } else {
                 $datos = [
-                    'grupo_id' => $grupo->id,
-                    'tipo' => 1
+                    'grupo_id' => $grupo->id
+                //    'tipo' => 1
                 ];
+                // Obtenemos todos los movimientos
                 $movimientos = Movimiento::whereArray($datos);
+                // Filtramos los de tipo 1 y 2 (gasto e ingreso)
+                $movimientos = array_filter($movimientos, function($movimiento) {
+                    if($movimiento->tipo == 1 || $movimiento->tipo == 2) {
+                        return $movimiento;
+                    };
+                });
+                // Los ingresos los ponemos con importe negativo pues son devoluciones de gastos
+                $movimientos = array_map(function($movimiento) {
+                    if ($movimiento->tipo == 2) {
+                        $movimiento->cantidad = $movimiento->cantidad * (-1);
+                    }
+                    return $movimiento;
+                }, $movimientos);
+
                 foreach($movimientos as $movimiento) {
                     $arrayparaQuien = [];
                     $arrayResultado = [];

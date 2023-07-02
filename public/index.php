@@ -5,7 +5,6 @@ require_once __DIR__ . '/../includes/app.php';
 use MVC\Router;
 use Controllers\LoginController;
 use Controllers\DashboardController;
-use Controllers\TareaController;
 use Controllers\MiembroController;
 use Controllers\APImiembros;
 use Controllers\APImovimientos;
@@ -55,8 +54,6 @@ $router->post('/cambiar-pass', [DashboardController::class, 'cambiarPass']);
 $router->get('/miembros', [MiembroController::class, 'index']);
 $router->get('/alta-miembro', [MiembroController::class, 'crear']);
 $router->post('/alta-miembro', [MiembroController::class, 'crear']);
-
-
 
 // API de miembros
 $router->get('/api/miembros', [APImiembros::class, 'index']);
