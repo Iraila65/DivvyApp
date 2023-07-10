@@ -43,16 +43,24 @@ class Router
             '/admin/regalos'
         ];
 
-        if ( isset ($_SERVER['PATH_INFO'] )){
-            $currentUrl = $_SERVER['PATH_INFO'];
-        } else {
-            $currentUrl = "/";
-        }
+        // if ( isset ($_SERVER['PATH_INFO'] )){
+        //     $currentUrl = $_SERVER['PATH_INFO'];
+        // } else {
+        //     $currentUrl = "/";
+        // }
+
         // if ( isset ($_SERVER['REQUEST_URI'] )){
         //     $currentUrl = $_SERVER['REQUEST_URI'];
         // } else {
         //     $currentUrl = "/";
         // }
+
+        if ( isset ($_SERVER['REQUEST_URI'] )){
+            $currentUrl = strtok($_SERVER['REQUEST_URI'], '?');
+        } else {
+            $currentUrl = "/";
+        }
+
         if (isset($_SERVER["REQUEST_METHOD"])) {
             $metodo = $_SERVER["REQUEST_METHOD"];
         } else {

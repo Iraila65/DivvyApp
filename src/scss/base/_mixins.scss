@@ -1,0 +1,98 @@
+@use 'base/variables' as v;
+
+/** Media Queries **/
+@mixin telefono {
+    @media (min-width: v.$telefono) {
+        @content;
+    }
+}
+@mixin tablet {
+    @media (min-width: v.$tablet) {
+        @content;
+    }
+}
+@mixin desktop {
+    @media (min-width: v.$desktop) {
+        @content;
+    }
+}
+
+
+@mixin boton($bgColor, $colorTexto) {
+    background-color: $bgColor;
+    padding: 1.5rem 4rem;
+    color: $colorTexto;
+    font-size: 1.6rem;
+    display: inline-block;
+    font-weight: 700;
+    border: none;
+    transition-property: background-color;
+    transition-duration: .3s;
+    text-align: center;
+    //display: block;
+    width: 100%;
+    border-radius: .5rem;
+    @include tablet {
+        width: auto;
+    }
+    &:hover {
+        background-color: darken( $bgColor, 10% );
+        cursor: pointer;
+    }
+}
+
+@mixin grid($columnas, $espaciado ) {
+    display: grid;
+    gap: $espaciado;
+    grid-template-columns: repeat($columnas, 1fr);
+}
+
+@mixin contenedor {
+    width: min(95%, 140rem);
+    margin: 0 auto;
+}
+
+@mixin contenedor-md {
+    width: min(95%, 80rem);
+    margin: 0 auto;
+}
+
+@mixin contenedor-sm {
+    width: min(95%, 60rem);
+    margin: 0 auto;
+}
+
+@mixin texto-fluido($min, $max) {
+    font-size: clamp($min, -2rem + 10vw ,$max);
+    // Esta función hace que el texto se adapte al tamaño de la pantalla
+}
+
+@mixin texto-degradado($color) {
+    background: linear-gradient(to right, $color 10%, lighten($color, 50%) 100%);
+    color: transparent;
+    background-clip: text;
+    text-align: center;
+    font-size: 7rem;
+
+    @include tablet {
+        font-size: 10rem;
+    }
+}
+
+
+@mixin enlace {
+    color: v.$blanco;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-weight: v.$bold;
+    background-color: transparent;
+    border: none;
+    &:hover {
+        color: v.$azul;
+        cursor: pointer;
+    }
+}
+
+@mixin shadow {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}

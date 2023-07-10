@@ -1,0 +1,62 @@
+@use '../base/variables' as v;
+@use '../base/mixins' as m;
+
+.formulario {
+    margin-top: 5rem;
+    width: 90%;
+}
+
+.campo {
+    display: flex;
+    margin-bottom: 2rem;
+    align-items: center;
+    label {
+        flex: 0 0 10rem;
+    }
+    input {
+        flex: 1; //esto hace que tome el resto del tamaño
+        border: none;
+        padding: 1rem;
+        border-radius: 1rem;
+        background-color: lighten($color: v.$gris, $amount: 40%);
+
+        &:disabled {
+            background-color: lighten(v.$negro, 30%);
+            color: v.$blanco;
+            cursor: not-allowed;
+        }
+    }
+
+}
+
+.colores {
+    display: flex;
+    padding: 1rem;
+}
+.color {
+    margin-right: 2rem;
+    &:hover {
+        cursor: pointer;
+    }
+}
+.color-marcado {
+    border: 2px solid v.$negro;
+}
+#color1 {
+    background-color: v.$color1;
+}
+#color2 {
+    background-color: v.$color2;
+}
+#color3 {
+    background-color: v.$color3;
+}
+#color4 {
+    background-color: v.$color4;
+}
+#color5 {
+    background-color: v.$color5;
+}
+#color6 {
+    background-color: v.$color6;
+}

@@ -1,0 +1,83 @@
+@use '../base/mixins' as m;
+@use '../base/variables' as v;
+
+.no-grupos {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    p {
+        font-size: 5rem;
+    }
+    a {
+        color: v.$indigo;
+    }
+}
+
+.listado-grupos {
+    list-style: none;
+    margin-top: 3rem;
+    padding: 0;
+    @include m.grid(1, 2rem);
+    @include m.tablet {
+        @include m.grid(2, 2rem);
+    }
+    @include m.desktop {
+        @include m.grid(3, 2rem);
+    }
+
+    .grupo {
+        background-color: lighten($color: v.$indigo, $amount: 5%);
+        min-height: 10rem;
+        display: flex;
+        align-items: center;
+        justify-content:space-between;
+        padding: 2rem;
+        line-height: 2;
+        border-radius: 1rem;
+
+        &--color1 {
+            background-color: v.$color1;
+            &:hover {
+                background-color: darken($color: v.$color1, $amount: 10%);
+            }
+        }
+        &--color2 {
+            background-color: v.$color2;
+            &:hover {
+                background-color: darken($color: v.$color2, $amount: 10%);
+            }
+        }
+        &--color3 {
+            background-color: v.$color3;
+            &:hover {
+                background-color: darken($color: v.$color3, $amount: 10%);
+            }
+        }
+        &--color4 {
+            background-color: v.$color4;
+            &:hover {
+                background-color: darken($color: v.$color4, $amount: 10%);
+            }
+        }
+        &--color5 {
+            background-color: v.$color5;
+            &:hover {
+                background-color: darken($color: v.$color5, $amount: 10%);
+            }
+        }
+        &--color6 {
+            background-color: v.$color6;
+            &:hover {
+                background-color: darken($color: v.$color6, $amount: 10%);
+            }
+        }
+
+        a {
+            color: v.$blanco;
+        }
+
+        .papelera-ocultar {
+            display: none;
+        }
+    }
+}

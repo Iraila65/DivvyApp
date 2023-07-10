@@ -1,0 +1,15 @@
+@use '../base/mixins' as m;
+@use '../base/variables' as v;
+
+.barra-grupo {
+    padding: 1rem 2rem;
+    gap: 2rem;
+}    
+
+.miembros-eliminar {
+    margin-top: 5rem;
+}
+
+.boton-eliminar {
+    margin-top: 3rem;
+}

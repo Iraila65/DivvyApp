@@ -1,0 +1,81 @@
+@use '../base/mixins' as m;
+@use '../base/variables' as v;
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+
+    &__thead {
+        background-color: v.$grisOscuro;
+        color: v.$blanco;
+    }
+
+    &__thead-color1 {
+        background-color: v.$color1;
+        color: v.$grisOscuro;
+    }
+    &__thead-color2 {
+        background-color: v.$color2;
+        color: v.$blanco;
+    }
+    &__thead-color3 {
+        background-color: v.$color3;
+        color: v.$blanco;
+    }
+    &__thead-color4 {
+        background-color: v.$color4;
+        color: v.$blanco;
+    }
+    &__thead-color5 {
+        background-color: v.$color5;
+        color: v.$blanco;
+    }
+    &__thead-color6 {
+        background-color: v.$color6;
+        color: v.$blanco;
+    }
+
+    &__th {
+        padding: 1rem;
+        text-align: left;
+    }
+
+    &__tr {
+        &:nth-child(even) {
+            background-color: v.$grisClaro;
+        }
+    }
+    
+    &__td {
+        padding: 1.5rem 1rem;
+
+        &--acciones {
+            @extend .table__td;
+            display: flex;
+            justify-content: flex-end;
+            gap: 2rem;
+            align-items: center;
+        }
+    }
+
+    &__accion {
+        all: unset;
+        // text-transform: uppercase;
+        font-size: 1.4rem;
+        font-weight: v.$bold;
+        &--editar {
+            color: v.$azul;
+        }
+        &--eliminar {
+            color: v.$rojo;
+        }
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    &__formulario {
+        all: unset;
+    }
+}

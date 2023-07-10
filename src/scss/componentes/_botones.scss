@@ -1,0 +1,34 @@
+@use '../base/variables' as v;
+@use '../base/mixins' as m;
+
+.boton {
+    @include m.boton(v.$azul, v.$blanco);
+}
+.boton-eliminar {
+    @include m.boton(v.$rojo, v.$blanco);
+}
+.boton-actualizar {
+    @include m.boton(v.$verde, v.$blanco);
+}
+.boton-miembro {
+    @include m.boton(v.$verde, v.$blanco);
+    margin-top: 2rem;
+}
+.boton-color1 {
+    @include m.boton(v.$color1, v.$grisOscuro);
+}
+.boton-color2 {
+    @include m.boton(v.$color2, v.$blanco);
+}
+.boton-color3 {
+    @include m.boton(v.$color3, v.$blanco);
+}
+.boton-color4 {
+    @include m.boton(v.$color4, v.$blanco);
+}
+.boton-color5 {
+    @include m.boton(v.$color5, v.$blanco);
+}
+.boton-color6 {
+    @include m.boton(v.$color6, v.$blanco);
+}
