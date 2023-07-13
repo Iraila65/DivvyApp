@@ -2,6 +2,7 @@ node_modules
 vendor
 /src/
 .env
-gulfile.js
+.env.deployment
+gulpfile.js
 package.json
 package-lock.json
