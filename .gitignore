@@ -1,8 +1,8 @@
 node_modules
 vendor
-/src/
 .env
 .env.deployment
+.env.desarrollo
 gulpfile.js
 package.json
 package-lock.json
