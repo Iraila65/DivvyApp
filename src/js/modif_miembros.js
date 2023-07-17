@@ -1,8 +1,7 @@
 (function() {
     
     const botonesModif = document.querySelectorAll('.table__accion--editar'); 
-    const botonesElim = document.querySelectorAll('.table__accion--eliminar');
-    const botonesInAct = document.querySelectorAll('.table__accion--inactivar');
+    const botones = document.querySelectorAll('.table__accion--boton');
     const usuariosId = document.querySelectorAll('.usuario-id');
     const usuario = document.querySelector('.usuario-conectado');
     const propietario = document.querySelector('.propietario-grupo');
@@ -39,42 +38,37 @@
         }  
     }
 
-    // Añadimos evento al botón eliminar Miembro
-    if (botonesElim) {
-        for(let i=0; i<botonesElim.length; i++ ) {
-            botonesElim[i].addEventListener('click', function(e) {
-                // OJO ESTOY HAY QUE CORREGIRLO!!! (no funciona si hay eliminar e inactivar en distintos miembros)
-                if (usuariosId[i].value == propietario.value) {
-                    swal.fire(
-                        'El propietario no se puede eliminar',
-                        '',
-                        'error'
-                    );
-                } else {
-                    // Llamar a la API de Miembros para eliminar 
-                    eliminarMiembro(e.target.value);
-                }
-            }); 
-        }
-    }
-
-    if (botonesInAct) {
-        for(let i=0; i<botonesInAct.length; i++ ) {
-            botonesInAct[i].addEventListener('click', function(e) {
-                if (activos[i].checked == true) {
-                    // Llamar a la API de Miembros para inactivar 
-                    const miembro = {
-                        id: this.value,
-                        activo: 0
-                    }    
-                    actualizarActivo(miembro);
-                } else {
-                    // Llamar a la API de Miembros para activar 
-                    const miembro = {
-                        id: this.value,
-                        activo: 1
-                    }  
-                    actualizarActivo(miembro);
+    // Añadimos evento a los botones de eliminar Miembro y de Inactivar/Activar
+    if (botones) {
+        for(let i=0; i<botones.length; i++ ) {
+            botones[i].addEventListener('click', function(e) {
+                if (e.target.classList.contains('table__accion--eliminar')) {
+                    if (usuariosId[i].value == propietario.value) {
+                        swal.fire(
+                            'El propietario no se puede eliminar',
+                            '',
+                            'error'
+                        );
+                    } else {
+                        // Llamar a la API de Miembros para eliminar 
+                        eliminarMiembro(e.target.value);
+                    }
+                } else if (e.target.classList.contains('table__accion--inactivar')) {
+                    if (activos[i].checked == true) {
+                        // Llamar a la API de Miembros para inactivar 
+                        const miembro = {
+                            id: this.value,
+                            activo: 0
+                        }    
+                        actualizarActivo(miembro);
+                    } else {
+                        // Llamar a la API de Miembros para activar 
+                        const miembro = {
+                            id: this.value,
+                            activo: 1
+                        }  
+                        actualizarActivo(miembro);
+                    }
                 }
             }); 
         }

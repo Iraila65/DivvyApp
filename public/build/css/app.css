@@ -365,7 +365,7 @@ h2 {
 }
 
 h3 {
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
 p {
@@ -1301,6 +1301,36 @@ p {
   cursor: pointer;
 }
 
+.barra-grupo {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: #FFFFFF;
+  box-shadow: 1px 12px 9px -13px #6b7280;
+  place-items: center;
+}
+@media (min-width: 768px) {
+  .barra-grupo {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .barra-grupo {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 1200px) {
+  .barra-grupo {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+  }
+}
+
 .no-grupos {
   display: flex;
   justify-content: space-between;
@@ -1736,6 +1766,7 @@ p {
   overflow: hidden;
   border: 1px solid #ccc;
   background-color: #f1f1f1;
+  margin-top: 2rem;
 }
 
 /* Estilos de los enlaces de las pestañas */
@@ -1762,13 +1793,14 @@ p {
 
 .dashboard__grafica {
   place-items: center;
-  width: 50%;
+  width: 90%;
 }
-@media (min-width: 768px) {
+@media (min-width: 1200px) {
   .dashboard__grafica {
     display: grid;
     gap: 5;
     grid-template-columns: repeat(2, 1fr);
+    width: 50%;
   }
 }
 .dashboard__grafica canvas {

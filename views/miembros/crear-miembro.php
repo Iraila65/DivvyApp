@@ -1,8 +1,10 @@
 <?php include_once __DIR__."/../templates/header.php"; ?>  
 
     <div class="contenedor">
-        <h3 class="nombre-pagina"><?php echo $grupo->grupo ?></h3>
+        
         <?php include_once __DIR__."/../templates/barraAcciones.php"; ?>
+
+        <h4 class="nombre-pagina">Crear miembro</h4>
         
         <?php include_once __DIR__."/../templates/alertas.php"; ?>
 

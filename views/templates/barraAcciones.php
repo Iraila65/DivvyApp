@@ -1,4 +1,4 @@
-<div class="barra barra-grupo">
+<div class="barra-grupo">
     <!-- El botón modificar grupo sólo le aparece al propietario -->
     <?php if ($grupo->propietarioId == $_SESSION['id']) { ?>
         <a 

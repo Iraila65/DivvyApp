@@ -6,6 +6,7 @@
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
+    margin-top: 2rem;
 }
     
 /* Estilos de los enlaces de las pestañas */
@@ -33,10 +34,11 @@
 .dashboard__grafica {
     place-items: center;
 
-    width: 50%;
+    width: 90%;
     
-    @include m.tablet {
+    @include m.xl_desktop {
         @include m.grid(2, 5);
+        width: 50%;
     }
 
     canvas {

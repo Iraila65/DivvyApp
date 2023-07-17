@@ -93,7 +93,9 @@
                                 <?php if ($grupo->propietarioId == $_SESSION['id']) { ?>
                                     <td class="table__td--acciones">                                 
                                         <button 
-                                            class="table__accion <?php echo ($miembro->saldo->saldo == 0) ? 'table__accion--eliminar' 
+                                            class="table__accion 
+                                                   table__accion--boton
+                                                    <?php echo ($miembro->saldo->saldo == 0) ? 'table__accion--eliminar' 
                                                                     : 'table__accion--inactivar' ?>"  
                                             type="submit"
                                             value="<?php echo $miembro->id; ?>">

@@ -1,4 +1,0 @@
-host: fra.domcloud.id
-u: divvyapp
-p: V9Lso9+-C33-Vwf6As
-db: divvyapp_db

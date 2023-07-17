@@ -3,7 +3,7 @@
     <div class="contenedor">
         <?php include_once __DIR__."/../templates/barraAcciones.php"; ?>
 
-        <h4 class="nombre-pagina">Análisis de gastos</h4>
+        <!-- <h4 class="nombre-pagina">Análisis de gastos</h4> -->
   
         <div class="tab">
             <a href="#" class="tablinks pest-tab1" onclick="openTab(event, 'Tab1')">Por categoría</a>
