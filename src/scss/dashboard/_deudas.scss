@@ -2,7 +2,6 @@
 @use '../base/variables' as v;
 
 .tabla-deudas {
-    
     list-style: none;
     margin-top: 1rem;
     padding: 0;
@@ -20,7 +19,7 @@
     justify-content:flex-end;
     align-items: center;
     p {
-        font-size: 2.5rem;
+        font-size: 2rem;
     }
     
 }
@@ -48,6 +47,7 @@
     display: inline-block;
     vertical-align: middle;
     margin-left: 1rem;
+    font-size: 2rem;
 }
 
 .flecha:after {
@@ -61,6 +61,12 @@
     transform: rotate(134deg) skewX(-10deg) skewY(-10deg);
     background: #eee linear-gradient(45deg, white, #f1f1f1 37%, #e1e1e1 57%, #f6f6f6);
     content: '';
+}
+
+.saldar-deuda {
+    &:hover {
+        cursor: pointer;
+    }
 }
 
 

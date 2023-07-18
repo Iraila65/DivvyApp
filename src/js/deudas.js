@@ -6,12 +6,11 @@
     const urlgrupo = document.querySelector('.grupo-conectado');
     
     let miembros = [];
-    let conceptos = [];
     let tipos = [];
     let grupo;
     let saldos = [];
     let movimientos = [];
-    let filtrados = [];
+    let deudas = [];
     let paraQuien = [];
     let fechaFormulario = new Date().toLocaleString('es-ES', { 
         year: 'numeric',
@@ -31,9 +30,10 @@
     let cantidad_a_saldar;
     let saldosficticios = [];
     
-    // Botón para añadir una nueva transacción
-    const nuevaTxBtn = document.querySelector('#agregar-tx');
-    if (nuevaTxBtn) {
+    // Flecha para saldar deuda
+    const flechasDeuda = document.querySelectorAll('#saldar-deuda'); 
+    
+    if (flechasDeuda) {
         async function iniciarApp() {
             const resultado = await Promise.all([
                 obtenerMiembros(), 
@@ -48,23 +48,8 @@
             grupo = await resultado[3];
             saldos = await resultado[4];
 
-            // Consulto los movimientos del Grupo
-            obtenerMovimientos();
-            
-            // Añadir un evento al botón de nueva transacción
-            nuevaTxBtn.addEventListener("click", function(){
-                mostrarFormulario(false);
-            })
-
-            // Filtros de búsqueda
-            const filtros = document.querySelectorAll('#mvtos_de');
-            if (filtros) {
-                filtros.forEach(filtro => {
-                    filtro.addEventListener('change', function(e) {
-                        filtrarMovimientos(e.target.value);
-                    });
-                });
-            }
+            // Consulto las deudas del Grupo
+            obtenerDeudas();
         }
         iniciarApp();    
     }
@@ -124,30 +109,19 @@
         }    
     }
         
-    function mostrarFormulario(editar = false, movimiento = {}) {  
+    function mostrarFormularioDeuda(deuda = {}) {  
         
-        if (editar) {
-            fechaFormulario = new Date(movimiento.fecha).toLocaleString('es-ES', { 
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            });
-            let ndec = contarDecimales(movimiento.cantidad);
-            cantidadFormateada = formatearImporte(movimiento.cantidad, ndec);
-        } else {
-            fechaFormulario = new Date().toLocaleString('es-ES', { 
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: false
-            });
-            cantidadFormateada = 0;
-        };
+        fechaFormulario = new Date().toLocaleString('es-ES', { 
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+        let ndec = contarDecimales(deuda.importe);
+        cantidadFormateada = formatearImporte(deuda.importe, ndec);
+        
 
         const modal = document.createElement('DIV');
         modal.classList.add('modal');
@@ -155,18 +129,18 @@
         formulario.classList.add('formulario');
         formulario.classList.add('nueva-tx');
         formulario.innerHTML = `
-                <legend>${editar ? 'Editar transacción' : 'Añade una nueva transacción'}</legend>
+                <legend>${'Saldar Deuda'}</legend>
                 <div class="campo">
                     <label>Quién?</label>                        
                     <select 
                         name="miembro_id" 
                         id="miembro_id"
                         class="miembro__select"
+                        disabled
                     >
                     <option value=""> -Seleccionar-</option>
                     ${miembros.map(miembro => `
-                        <option ${editar && miembro.nombre == movimiento.miembro.nombre ? 'selected' :
-                                (!editar && miembro.nombre == nombreUsuario.value) ? 'selected' : ''}
+                        <option ${miembro.id == deuda.from_miembro_id ? 'selected' : ''}
                             value="${miembro.id}"
                         >${miembro.nombre}</option>
                         `).join('')}
@@ -179,10 +153,10 @@
                         name="tipo_id" 
                         id="tipo_id"
                         class="tipo__select"
+                        disabled
                     >
                     ${tipos.map(tipo => `
-                        <option ${editar && tipo.nombre == movimiento.tipo_nombre ? 'selected' :
-                                (!editar && tipo.nombre == "Gasto") ? 'selected' : ''}
+                        <option ${tipo.nombre == "Transferencia" ? 'selected' : ''}
                             value="${tipo.id}"
                         >${tipo.nombre}</option>
                         `).join('')}
@@ -195,7 +169,8 @@
                         type="number" 
                         name="cantidad" 
                         id="cantidad"
-                        value="${editar ? cantidadFormateada : ''}"
+                        value="${cantidadFormateada}"
+                        readonly
                     >
                 </div>
 
@@ -205,7 +180,8 @@
                         type="text" 
                         name="descripcion" 
                         id="descripcion"
-                        value="${editar ? movimiento.descripcion : ''}"
+                        value="Saldar deuda"
+                        readonly
                     >
                 </div>
 
@@ -218,32 +194,16 @@
                             <div class="miembro-para">
                                 <input 
                                     type="checkbox" 
-                                    class="for-whom ${!editar ? 'check' :
-                                                    (editar && movimiento.paraquien.includes(miembro.id)) ? 'check' : ''}"
+                                    class="for-whom ${deuda.to_miembro_id == miembro.id ? 'check' : ''}"
                                     name="" 
                                     value="${miembro.id}"
+                                    disabled
                                 >
                                 ${miembro.nombre}
                             </div> 
                             `).join('')}
                 
                     </div>    
-                </div>
-
-                <div class="campo">
-                    <label>Categoría:</label>                        
-                    <select 
-                        name="concepto_id" 
-                        id="concepto_id"
-                        class="concepto__select"
-                    >
-                    <option value=""> -Seleccionar-</option>
-                    ${conceptos.map(concepto => `
-                        <option ${editar && concepto.id == movimiento.concepto_id ? 'selected' : ''} 
-                            value="${concepto.id}"
-                        >${concepto.nombre}</option>
-                        `).join('')}
-                    </select>  
                 </div>
 
                 <div class="campo">
@@ -269,20 +229,11 @@
                     
                 </div>
 
-                <div class="campo">
-                    <input 
-                        type="hidden" 
-                        name="id" 
-                        id="id"
-                        value="${editar ? movimiento.id : ''}"
-                    >
-                </div>
-
                 <div class="opciones">
                     <input 
                         type="submit" 
                         class="submit-nueva-tx" 
-                        value="${movimiento.id ? 'Guardar cambios' : 'Añadir Transacción'}" 
+                        value="Saldar deuda" 
                     >
                     <button type="button" class="cerrar-modal">Cancelar</button>
                 </div>      
@@ -360,10 +311,6 @@
                 var indiceTipo = campoTipo.selectedIndex;
                 var tipoSeleccionado = campoTipo.options[indiceTipo];
 
-                const campoConcepto = document.getElementById("concepto_id");
-                var indiceConcepto = campoConcepto.selectedIndex;
-                var conceptoSeleccionado = campoConcepto.options[indiceConcepto];
-                
                 const descripcion = document.querySelector('#descripcion').value;
 
                 if (!fechaSeleccionada || fechaSeleccionada == "") {
@@ -372,43 +319,24 @@
 
                 let movimiento = {};
 
-                if (editar) {
-                    movimiento = {
-                        'id': document.querySelector('#id').value,
-                        'grupo_id': grupo.id,
-                        'miembro_id': miembroSeleccionado.value,
-                        'cantidad': cantidad,
-                        'tipo': tipoSeleccionado.value, 
-                        'quien': paraQuien.toString(), 
-                        'concepto_id': conceptoSeleccionado.value, 
-                        'descripcion': descripcion, 
-                        'fecha': fechaSeleccionada, 
-                        'actualizador_id': usuario.value
-                    };
-
-                } else {
-                    movimiento = {
-                        'id': document.querySelector('#id').value,
-                        'grupo_id': grupo.id,
-                        'miembro_id': miembroSeleccionado.value,
-                        'cantidad': cantidad,
-                        'tipo': tipoSeleccionado.value, 
-                        'quien': paraQuien.toString(), 
-                        'concepto_id': conceptoSeleccionado.value, 
-                        'descripcion': descripcion, 
-                        'fecha': fechaSeleccionada, 
-                        'creador_id': usuario.value
-                    };
-                }
+                
+                movimiento = {
+                    'grupo_id': grupo.id,
+                    'miembro_id': miembroSeleccionado.value,
+                    'cantidad': cantidad,
+                    'tipo': tipoSeleccionado.value, 
+                    'quien': paraQuien.toString(), 
+                    'concepto_id': '', 
+                    'descripcion': descripcion, 
+                    'fecha': fechaSeleccionada, 
+                    'creador_id': usuario.value
+                };
+                
 
                 const validacion = validarMovimiento(movimiento);
 
                 if (validacion) {
-                    if (editar) {
-                        actualizarTx(movimiento);
-                    } else {
-                        añadirNuevaTx(movimiento);
-                    }
+                    añadirNuevaTx(movimiento);
                 }
             }
         });
@@ -540,62 +468,14 @@
             .then(actualizarTablasAlta(movimiento))
             .then(() => {
                 mostrarAlerta(
-                    "Movimiento agregado correctamente", 
+                    "Deuda saldada correctamente", 
                     "exito",
                     document.querySelector('.formulario legend')
                 );
                 const modal = document.querySelector('.modal');
                 setTimeout(() => {
                     modal.remove();
-                    mostrarMovimientos(); 
-                }, 1500);
-            })
-            .catch(() => {
-                // Ha habido un error al actualizar los datos
-                mostrarAlerta(
-                    "Ha habido un error en la actualización de tablas", 
-                    "error",
-                    document.querySelector('.formulario legend')
-                );
-            });
-    }
-
-    async function eliminarTx(movimiento) {
-        movimiento.cantidad = movimiento.cantidad * (-1);
-        actualizarSaldos(movimiento)
-            .then(saldarDeudas())
-            .then(actualizarTablasBaja(movimiento))
-            .then(() => {
-                Swal.fire("Movimiento eliminado correctamente");
-                mostrarMovimientos();
-            })
-            .catch(() => {
-                // Ha habido un error al actualizar los datos
-                Swal.fire("Error", "Ha habido un error en la actualización de tablas");
-            });
-    }
-
-    async function actualizarTx(movimiento) {
-        const {id} = movimiento;
-        // Busco el movimiento anterior y actualizo saldos anulando el movimiento
-        // Hago una copia profunda para que no actualice el movimiento en memoria
-        // Luego actualizo saldos con el nuevo importe
-        let movimientoAnterior = JSON.parse(JSON.stringify(encontrarMovimiento(id)));
-        movimientoAnterior.cantidad = movimientoAnterior.cantidad * (-1);
-        actualizarSaldos(movimientoAnterior)
-            .then(actualizarSaldos(movimiento))
-            .then(saldarDeudas())
-            .then(actualizarTablasMod(movimiento))
-            .then(() => {
-                mostrarAlerta(
-                    "Movimiento modificado correctamente", 
-                    "exito",
-                    document.querySelector('.formulario legend')
-                );
-                const modal = document.querySelector('.modal');
-                setTimeout(() => {
-                    modal.remove();
-                    mostrarMovimientos(); 
+                    obtenerDeudas(); 
                 }, 1500);
             })
             .catch(() => {
@@ -770,43 +650,6 @@
         });
     }
 
-    async function actualizarTablasBaja(mvto) {    
-        // Eliminar movimiento
-        eliminarMovimiento(mvto, false).then(() => {
-            // Eliminar las deudas actuales del grupo 
-            const {grupo_id} = mvto;
-            eliminarDeudas(grupo_id).then(() => {
-                // Grabar los movimientos ficticios como las deudas actuales
-                mvtosficticios.forEach(mvtofic => {
-                    grabarDeuda(mvtofic);
-                });
-                // Se actualiza la tabla de saldos de todos los registros
-                saldos.forEach(regsaldo => {
-                    actualizarRegistroSaldo(regsaldo);
-                });
-            });
-        });
-    }
-
-    async function actualizarTablasMod(mvto) {
-        // Actualizar movimiento
-        actualizarMovimiento(mvto).then(() => {
-            // Eliminar las deudas actuales del grupo 
-            const {grupo_id} = mvto;
-            eliminarDeudas(grupo_id).then(() => {
-                // Grabar los movimientos ficticios como las deudas actuales
-                mvtosficticios.forEach(mvtofic => {
-                    grabarDeuda(mvtofic);
-                });
-                // Se actualiza la tabla de saldos de todos los registros
-                saldos.forEach(regsaldo => {
-                    actualizarRegistroSaldo(regsaldo);
-                });
-            });
-        });
-
-    }
-
     async function grabarMovimiento(mvto) {
         const {grupo_id, miembro_id, cantidad, tipo, quien, concepto_id, descripcion, fecha, creador_id} = mvto;
         const datos = new FormData();
@@ -830,54 +673,6 @@
             if (resultado.tipo == 'exito') {
                 // Agregar el nuevo movimiento al listado global de movimientos
                 movimientos = [...movimientos, resultado.movimiento];
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function actualizarMovimiento(mvto) {
-        const {id, grupo_id, miembro_id, cantidad, tipo, quien, concepto_id, descripcion, fecha, actualizador_id} = mvto;
-        const datos = new FormData();
-        datos.append('id', id);
-        datos.append('grupo_id', grupo_id);
-        datos.append('miembro_id', miembro_id);
-        datos.append('cantidad', cantidad);
-        datos.append('tipo', tipo);
-        datos.append('quien', quien);    
-        datos.append('concepto_id', concepto_id);    
-        datos.append('descripcion', descripcion);    
-        datos.append('fecha', fecha);    
-        datos.append('actualizador_id', actualizador_id);   
-
-        try {
-            const url = '/api/movimiento/actualizar';
-            const respuesta = await fetch(url, {
-                method: 'POST',
-                body: datos
-            });
-            const resultado = await respuesta.json();
-                        
-            if (resultado.tipo == 'exito') { 
-                // Actualizar el movimiento de la lista en memoria
-                movimientos = movimientos.map(mvto => {
-                    if(mvto.id == id) {
-                        mvto.miembro_id = resultado.movimiento.miembro_id;
-                        mvto.cantidad = resultado.movimiento.cantidad;
-                        mvto.tipo = resultado.movimiento.tipo;
-                        mvto.quien = resultado.movimiento.quien;
-                        mvto.concepto_id = resultado.movimiento.concepto_id;
-                        mvto.descripcion = resultado.movimiento.descripcion;
-                        mvto.fecha = resultado.movimiento.fecha;
-                        mvto.actualizador_id = resultado.movimiento.actualizador_id;
-                        mvto.miembro = resultado.movimiento.miembro;
-                        mvto.tipo_nombre = resultado.movimiento.tipo_nombre;
-                        mvto.paraquien = resultado.movimiento.paraquien;
-                        mvto.fecha_date = resultado.movimiento.fecha_date;
-                        mvto.fecha_hora = resultado.movimiento.fecha_hora;
-                    }
-                    return mvto;
-                });
             }
         } catch (error) {
             console.log(error);
@@ -944,142 +739,67 @@
         }
     }
 
-    async function obtenerMovimientos() {
+    async function obtenerDeudas() {
         try {
-            const url = `/api/movimientos?url=${urlgrupo.value}`;
+            const url = `/api/deudas?url=${urlgrupo.value}`;
             const respuesta = await fetch(url);
             const resultado = await respuesta.json();
-            movimientos = resultado.movimientos;
-            mostrarMovimientos();
+            deudas = resultado.deudas;
+            mostrarDeudas();
         } catch (error) {
             console.log(error);
         }
     }
 
-    function mostrarMovimientos(filtro = "") {
-        // Primero tenemos que limpiar el html de los movimientos anteriores para que no se dupliquen
-        limpiarMovimientos();
+    function mostrarDeudas() {
+        // Primero tenemos que limpiar el html de las deudas anteriores para que no se dupliquen
+        limpiarDeudas();
 
-        if (filtro == "") {
-            obtenerFiltro();
-        }
-
-        const contenedorMovimientos = document.querySelector('#listado-txs');
-        if (filtrados.length == 0) {
-            const textoNoMovimientos = document.createElement('LI');
-            textoNoMovimientos.textContent = "No hay movimientos";
-            textoNoMovimientos.classList.add('no-txs');
-            contenedorMovimientos.appendChild(textoNoMovimientos);
+        const contenedorDeudas = document.querySelector('#listado-deudas');
+        if (deudas.length == 0) {
+            const textoNoDeudas = document.createElement('LI');
+            textoNoDeudas.textContent = "No hay deudas";
+            textoNoDeudas.classList.add('no-deudas', 'animate__animated', 'animate__rubberBand');
+            contenedorDeudas.appendChild(textoNoDeudas);
         } else {
 
-            filtrados.forEach(movimiento => {
-                const lineaMovimiento = document.createElement('LI');
-                lineaMovimiento.dataset.movtoId = movimiento.id;
-                lineaMovimiento.classList.add('tx');
+            deudas.forEach(deuda => {
+                const lineaDeuda = document.createElement('LI');
+                lineaDeuda.classList.add('deuda');
 
-                // Fulanito realizó un ingreso de cantidad por concepto el día x
-                const mvto = document.createElement('P');
-                let importeFormateado = formatearImporte(movimiento.cantidad, 2);
-                
-                mvto.textContent = `
-                    ${movimiento.miembro.nombre} 
-                    realizó un ${movimiento.tipo_nombre} 
-                    de ${importeFormateado} 
-                    por ${movimiento.descripcion}
-                    el dia ${movimiento.fecha_date}
-                    a las ${movimiento.fecha_hora}
-                `;
+                const miembroDesde = document.createElement('P');
+                miembroDesde.classList.add('animate__animated', 'animate__lightSpeedInLeft');
+                miembroDesde.textContent = deuda.from_miembro.nombre;
+                lineaDeuda.appendChild(miembroDesde);
 
-                const opcionesDiv = document.createElement('DIV');
-                opcionesDiv.classList.add('opciones');
+                const flecha = document.createElement('DIV');
+                flecha.classList.add('flecha', 'saldar-deuda', 'animate__animated', 'animate__bounce');
+                flecha.id = 'saldar-deuda';
 
-                const btnEditar = document.createElement('BUTTON');
-                btnEditar.classList.add('editar-mvto');
-                btnEditar.dataset.movtoId = movimiento.id;
-                btnEditar.textContent = "Editar";
-                btnEditar.onclick = function() {
-                    mostrarFormulario(true, {...movimiento});
+                // Crear el elemento <span> dentro del <div> y establecer su contenido
+                const spanElement = document.createElement('SPAN');
+                const deudaImporte = formatearImporte(deuda.importe, 2);
+                spanElement.textContent = `debe ${deudaImporte} € a`;
+                flecha.appendChild(spanElement);
+                flecha.onclick = function() {
+                    mostrarFormularioDeuda(deuda);;
                 }
+                lineaDeuda.appendChild(flecha);
 
-                const btnEliminar = document.createElement('BUTTON');
-                btnEliminar.classList.add('eliminar-mvto');
-                btnEliminar.dataset.movtoId = movimiento.id;
-                btnEliminar.textContent = "Eliminar";
-                btnEliminar.onclick = function() {
-                    confirmarEliminarMvto({...movimiento});   // le paso una copia en memoria del objeto movimiento
-                }
+                const miembroHacia = document.createElement('P');
+                miembroHacia.classList.add('animate__animated', 'animate__lightSpeedInRight');
+                miembroHacia.textContent = deuda.to_miembro.nombre;
+                lineaDeuda.appendChild(miembroHacia);
 
-                opcionesDiv.appendChild(btnEditar);
-                opcionesDiv.appendChild(btnEliminar);
-                lineaMovimiento.appendChild(mvto);
-                lineaMovimiento.appendChild(opcionesDiv);
-                contenedorMovimientos.appendChild(lineaMovimiento);
+                contenedorDeudas.appendChild(lineaDeuda);
             });
         }
     }
 
-    function confirmarEliminarMvto(movimiento) {
-        Swal.fire({
-            title: '¿Eliminar movimiento?',
-            showCancelButton: true,
-            confirmButtonText: 'Sí',
-            cancelButtonText: 'No',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                eliminarTx(movimiento);
-            } else {
-                Swal.fire('No se ha eliminado el movimiento', '', 'info')
-            }
-        })
-    }
-
-    function limpiarMovimientos() {
-        const listadoMovimientos = document.querySelector('#listado-txs');
-        while (listadoMovimientos.firstChild) {
-            listadoMovimientos.removeChild(listadoMovimientos.firstChild);
-        }
-    }
-
-    function obtenerFiltro() {
-        const mvtosDe = document.getElementById("mvtos_de");
-        var indicemvtosDe = mvtosDe.selectedIndex;
-        var miembroFiltro = mvtosDe.options[indicemvtosDe];
-
-        if (miembroFiltro.value == "T") {
-            filtrados = movimientos;
-        } else {
-            filtrados = movimientos.filter(movimiento => movimiento.miembro_id == miembroFiltro.value);
-        }
-    }
-
-    function filtrarMovimientos(filtro) {
-        if (filtro !== "T") {
-            filtrados = movimientos.filter(movimiento => movimiento.miembro_id == filtro);
-        } else {
-            filtrados = movimientos;
-        }
-        mostrarMovimientos(filtro);
-    }
-
-    async function eliminarMovimiento(movimiento, comunicar=true) {
-        const {id} = movimiento;
-        const datos = new FormData();
-        datos.append('id', id);
-        try {
-            const url = '/api/movimiento/eliminar';
-            const respuesta = await fetch(url, {
-                method: 'POST',
-                body: datos
-            });
-            const resultado = await respuesta.json();
-            if (comunicar) Swal.fire('Eliminado', resultado.mensaje, 'success');
-            if (resultado.tipo == 'exito') { 
-                // Borrar el movimiento en memoria
-                movimientos = movimientos.filter(mvto => mvto.id !== id );
-                mostrarMovimientos();
-            }
-        } catch (error) {
-            console.log(error);
+    function limpiarDeudas() {
+        const listadoDeudas = document.querySelector('#listado-deudas');
+        while (listadoDeudas.firstChild) {
+            listadoDeudas.removeChild(listadoDeudas.firstChild);
         }
     }
 
@@ -1101,30 +821,8 @@
         return s;
     }
 
-    function imprimirDatos(mayorSaldo, mayorSaldo_id, menorSaldo, menorSaldo_id) {
-        console.log("Mayor saldo");
-        console.log("Id: ");
-        console.log(mayorSaldo_id);
-        console.log("Saldo: ");
-        console.log(mayorSaldo);
-        console.log("Menor saldo");
-        console.log("Id: ");
-        console.log(menorSaldo_id);
-        console.log("Saldo: ");
-        console.log(menorSaldo);
-    }
-
     function formatearImporte(imp, ndec) {
         return parseFloat(parseFloat(imp).toFixed(ndec)).toString();
-    }
-
-    // Función para encontrar un movimiento por su ID
-    function encontrarMovimiento(id) {
-        let movimientoEncontrado = movimientos.find(function(movimiento) {
-            return movimiento.id === id;
-        });
-    
-        return movimientoEncontrado;
     }
 
     function contarDecimales(numero) {

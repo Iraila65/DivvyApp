@@ -9,26 +9,7 @@
             <?php include_once __DIR__."/../templates/alertas.php"; ?>
 
             <div class="tabla-deudas">
-                <ul>
-                    <?php if (empty($deudas)) { ?>
-                        <li class="no-deudas animate__animated animate__rubberBand">No hay deudas</li>
-                    <?php } else { ?>
-                        <?php foreach($deudas as $deuda) { ?>
-                            <li class="deuda">
-                                <p class="animate__animated animate__lightSpeedInLeft">
-                                    <?php echo $deuda->from_miembro->nombre ?>
-                                </p>
-                                <div class='flecha animate__animated animate__bounce'>
-                                    <span>debe <?php echo rtrim(rtrim(number_format($deuda->importe, 2), '0'), '.') ?> € a</span> 
-                                </div>
-                                <p class="animate__animated animate__lightSpeedInRight">
-                                    <?php echo $deuda->to_miembro->nombre ?>
-                                </p>
-                            </li>
-                        <?php } ?>
-                    <?php } ?>
-                    
-                </ul>
+                <ul id="listado-deudas" class="listado-deudas"></ul>
             </div>
 
             
