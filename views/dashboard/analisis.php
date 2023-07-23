@@ -9,6 +9,7 @@
             <a href="#" class="tablinks pest-tab1" onclick="openTab(event, 'Tab1')">Por categoría</a>
             <a href="#" class="tablinks pest-tab2" onclick="openTab(event, 'Tab2')">Por miembro</a>
             <a href="#" class="tablinks pest-tab3" onclick="openTab(event, 'Tab3')">Serie mensual</a>
+            <a href="#" class="tablinks pest-tab4" onclick="openTab(event, 'Tab4')">Detalle</a>
         </div>
 
         <div id="Tab1" class="tabcontent">
@@ -31,9 +32,16 @@
 
         <div id="Tab3" class="tabcontent">
             <h3>Serie mensual de los gastos</h3>
+            <div class="dashboard__grafica">
+                <canvas id="grafica-serie-mensual-miembros"></canvas>
+                <canvas id="grafica-serie-mensual-categorias"></canvas>
+            </div>
+        </div>
 
-
-
+        <div id="Tab4" class="tabcontent">
+            <h3>Detalle mensual</h3>
+            <div class="filtros" id="filtros-detalle"></div>
+            <div class="tabla-detalle" id="listado-detalle"></div>
         </div>
 
         <script>

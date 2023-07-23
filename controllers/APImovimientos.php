@@ -182,6 +182,7 @@ class APImovimientos {
 
     public static function gastos() {
         isAuth();
+        
         $url = $_GET['url'];
         if (!$url) {
             $respuesta = [
@@ -255,6 +256,7 @@ class APImovimientos {
                     }
                     $movimiento->concepto = $concepto->nombre;
                     $movimiento->fecha_date = date("Y-m-d", strtotime($movimiento->fecha));
+                    $movimiento->fecha_mes = date("Y-m", strtotime($movimiento->fecha));
                     $movimiento->fecha_hora = date("H:i", strtotime($movimiento->fecha));
                 }
 
@@ -313,17 +315,20 @@ class APImovimientos {
                             $array_miembros[] = [
                                 'miembro_id' => $miembro_gasto['miembro_id'],
                                 'nombre' => $miembro_gasto['nombre'],
-                                'importes' => []
+                                'importes' => [],
+                                'importesMeses' => []
                             ];
                         }
                     }     
                 }
                 
                 $miembros = [];
+                $nombresM = [];
                 $importes = [];
                 // Recorremos el array de miembros buscando sus importes en el array de totales
                 foreach($array_miembros as &$miembro_respuesta) {
                     $miembros[] = $miembro_respuesta['miembro_id'];
+                    $nombresM[] = $miembro_respuesta['nombre'];
                     $importes[] = 0;
                     foreach($array_totales as $concepto) {
                         $encontrado = false;
@@ -356,7 +361,8 @@ class APImovimientos {
                         $array_conceptos[] = [
                             'concepto' => $movimiento->concepto,
                             'miembros' => $miembros,
-                            'importes' => $importes
+                            'importes' => $importes,
+                            'importesMeses' => []
                         ];
                     }
                 }
@@ -383,10 +389,135 @@ class APImovimientos {
                     }
                 }
 
+            
+                $conceptos = [];
+                $importesC = [];
+                // Recorremos el array de conceptos buscando sus importes en el array de totales
+                foreach($array_conceptos as &$concepto_respuesta) {
+                    $conceptos[] = $concepto_respuesta['concepto'];
+                    $importesC[] = 0;  
+                }
+
+                // Construimos el array de serie mensual
+                $array_fechas = [];
+                $meses = [];
+                foreach($movimientos as $movimiento) {
+                    // buscamos la fecha en el array de fechas
+                    $encontrado = false;
+                    foreach($array_fechas as &$fecha_respuesta) {
+                        if ($fecha_respuesta['mes'] == $movimiento->fecha_mes) {
+                            $encontrado = true;
+                            break; 
+                        }
+                    }
+                    // y si no lo encontramos lo creamos
+                    if (!$encontrado) {
+                        $array_fechas[] = [
+                            'mes' => $movimiento->fecha_mes,
+                            'miembros' => $miembros,
+                            'nombres' => $nombresM,
+                            'importesM' => $importes,
+                            'conceptos' => $conceptos,
+                            'importesC' => $importesC
+                        ];
+                        $meses[] = $movimiento->fecha_mes;
+                    }
+                }
+                sort($array_fechas);
+
+                // Rellenamos los importes a partir de los movimientos
+                foreach($movimientos as $movimiento) {    
+
+                    // buscamos la fecha del movimiento en el array de fechas
+                    foreach($array_fechas as &$fecha_respuesta) {
+
+                        if ($fecha_respuesta['mes'] == $movimiento->fecha_mes) {
+                            // Sumamos el importe de cada miembro en su lugar correspondiente
+                            foreach($movimiento->paraQuien as $miembro_gasto) {
+                                // buscamos en qué lugar se encuentra el miembro en el array de miembros
+                                for ($i = 0; $i < count($miembros); $i++) {
+                                    if ($miembros[$i] == $miembro_gasto['miembro_id']) {
+                                        $fecha_respuesta['importesM'][$i] += $miembro_gasto['importe'];
+                                    }
+                                }
+                            }
+                            // Sumamos el importe de cada concepto en su lugar correspondiente
+                            // buscamos en qué lugar se encuentra el concepto en el array de conceptos
+                            for ($i = 0; $i < count($conceptos); $i++) {
+                                 if ($conceptos[$i] == $movimiento->concepto) {
+                                     $fecha_respuesta['importesC'][$i] += $movimiento->cantidad;
+                                 }
+                            }
+                            break; 
+                        }
+                    }
+                }
+
+                // Rellenamos el desglose de meses en el array de miembros
+                
+                foreach($array_miembros as &$miembro_respuesta) {
+                    // buscamos en qué lugar se encuentra el miembro en el array de miembros
+                    for ($i = 0; $i < count($miembros); $i++) {
+                        if ($miembros[$i] == $miembro_respuesta['miembro_id']) {
+                            // aquí tengo que rellenar $miembro_respuesta['importesMeses]
+                            for ($j = 0; $j < count($array_fechas); $j++) {
+                                //$miembro_respuesta['importesMeses'][$i] += $fecha['importesM'][$j];
+                                $miembro_respuesta['importesMeses'][] = $array_fechas[$j]['importesM'][$i];
+                            }
+                        }
+                    }   
+                }
+
+                // Rellenamos el desglose de meses en el array de conceptos
+                
+                foreach($array_conceptos as &$concepto_respuesta) {
+                    // buscamos en qué lugar se encuentra el concepto en el array de conceptos
+                    for ($i = 0; $i < count($conceptos); $i++) {
+                        if ($conceptos[$i] == $concepto_respuesta['concepto']) {
+                            for ($j = 0; $j < count($array_fechas); $j++) {
+                                $concepto_respuesta['importesMeses'][] = $array_fechas[$j]['importesC'][$i];
+                            }
+                        }
+                    }   
+                }
+                
+                // Por último, generamos el array de detalle
+
+                $array_detalles = [];
+                foreach($movimientos as $movimiento) {
+                    // buscamos la línea que tenga el mismo concepto, mismo miembro y mismo mes del movimiento
+                    
+                    foreach($movimiento->paraQuien as $miembro_gasto) {
+                        $encontrado = false;
+                        foreach($array_detalles as &$detalle) {
+                            if (
+                                $movimiento->fecha_mes == $detalle['mes'] &&
+                                $movimiento->concepto == $detalle['concepto'] &&
+                                $miembro_gasto['miembro_id'] == $detalle['miembro']
+                            ) {
+                                $encontrado = true;
+                                $detalle['importe'] += $miembro_gasto['importe'];
+                            }
+                        }
+                        if (!$encontrado) {
+                            $array_detalles[] = [
+                                'mes' => $movimiento->fecha_mes,
+                                'concepto' => $movimiento->concepto,
+                                'miembro' => $miembro_gasto['miembro_id'],
+                                'nombre' => $miembro_gasto['nombre'],
+                                'importe' => $miembro_gasto['importe']
+                            ];
+                        }
+                    }
+                }
+                sort($array_detalles);
+                
                 echo json_encode([
                     'totales' => $array_totales,
                     'miembros' => $array_miembros,
-                    'conceptos' => $array_conceptos
+                    'conceptos' => $array_conceptos,
+                    'fechas' => $array_fechas,
+                    'detalles' => $array_detalles
                 ]);
             }
         }
