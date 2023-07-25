@@ -3,15 +3,15 @@
 
 .filtros {
     background-color: lighten($color: v.$blanco, $amount: 20%);
+    display: block;
     margin-top: 2rem;
     border-radius: 1rem;
     padding: 2rem;
     
     .filtros-inputs {
-        @include m.tablet {
+        
+        @include m.desktop {
             display: flex;
-            //justify-content: space-between;
-            justify-content: left;
             align-items: center;
             gap: 2rem;
         }
@@ -26,31 +26,36 @@
     h2 {
         color: v.$indigo;
         font-size: 2rem;
-        @include m.tablet {
+        @include m.desktop {
             margin: 0;
         }
     }
 
     .campo {
-        margin-bottom: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 2rem;
-        margin-right: 2rem;
+        display: block;
+        margin: 1rem 2rem 1rem 2rem;
+        
         @include m.tablet {
-            margin-bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }       
+        gap: 2rem;
+
+        @include m.desktop {
+            margin: 0;
+            gap: .5rem;
         }
 
         label {
             font-size: 1.5rem;
-            text-align: center;
             font-weight: bold;
             display: block;
+            padding: 1.5rem;
         }
 
         select {
-            flex: .5; //esto hace que tome la mitad del tamaño
+            //flex: .5; //esto hace que tome la mitad del tamaño
             border: 1px solid v.$gris;
             padding: .5rem;
             border-radius: 1rem;

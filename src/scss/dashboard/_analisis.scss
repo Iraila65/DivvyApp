@@ -31,6 +31,16 @@
     background-color: #fff;
 }
 
+.titulo-apartado {
+    font-size: 1.5rem;
+    @include m.tablet {
+        font-size: 2rem;
+    }
+    @include m.desktop {
+        font-size: 3rem;
+    }
+}
+
 .dashboard__grafica {
     place-items: center;
 
@@ -41,8 +51,10 @@
         width: 50%;
     }
 
-    canvas {
-        margin-top: 3rem;
-        margin-right: 2rem;
-    }
+    
+
+    // canvas {
+    //     margin-top: 3rem;
+    //     margin-right: 2rem;
+    // }
 }

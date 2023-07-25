@@ -13,7 +13,7 @@
         </div>
 
         <div id="Tab1" class="tabcontent">
-            <h3>Análisis por categoría de gasto</h3>
+            <h3 class="titulo-apartado">Análisis por categoría de gasto</h3>
 
             <div class="dashboard__grafica">
                 <canvas id="grafica-totales-categoria"></canvas>
@@ -22,7 +22,7 @@
         </div>
 
         <div id="Tab2" class="tabcontent">
-            <h3>Análisis por miembro del grupo</h3>
+            <h3 class="titulo-apartado">Análisis por miembro del grupo</h3>
 
             <div class="dashboard__grafica">
                 <canvas id="grafica-totales-miembros"></canvas>
@@ -31,7 +31,7 @@
         </div>
 
         <div id="Tab3" class="tabcontent">
-            <h3>Serie mensual de los gastos</h3>
+            <h3 class="titulo-apartado">Serie mensual de los gastos</h3>
             <div class="dashboard__grafica">
                 <canvas id="grafica-serie-mensual-miembros"></canvas>
                 <canvas id="grafica-serie-mensual-categorias"></canvas>
@@ -39,8 +39,8 @@
         </div>
 
         <div id="Tab4" class="tabcontent">
-            <h3>Detalle mensual</h3>
-            <div class="filtros" id="filtros-detalle"></div>
+            <h3 class="titulo-apartado">Detalle mensual</h3>
+            <div class="filtros filtros-input" id="filtros-detalle"></div>
             <div class="tabla-detalle" id="listado-detalle"></div>
         </div>
 

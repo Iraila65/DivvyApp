@@ -63,8 +63,12 @@
         }
 
         .opciones {
-            display: flex;
-            justify-content: space-between;
+            display: block;
+            @include m.tablet {
+                display: flex;
+                justify-content: space-between;
+            }
+            
         }
 
         .cajas-para {

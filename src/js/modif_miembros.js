@@ -15,6 +15,16 @@
     if (botonesModif) {
         for(let i=0; i<botonesModif.length; i++ ) {
             botonesModif[i].addEventListener('click', function(e) {
+                // Validar que el peso se pueda modificar
+                if (pesos[i].classList.contains('no-editable')) {
+                    swal.fire(
+                        'El peso no se puede modificar porque ya hay movimientos',
+                        '',
+                        'error'
+                    );
+                    return;
+                }
+
                 // Validar que el peso sea numérico 
                 if (validarNumeroDecimal(Number(pesos[i].textContent.replace(',', '.'))) == false) {
                     swal.fire(

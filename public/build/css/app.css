@@ -461,6 +461,7 @@ p {
 .boton {
   background-color: #2563EB;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -485,6 +486,7 @@ p {
 .boton-eliminar {
   background-color: rgb(169, 0, 0);
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -509,6 +511,7 @@ p {
 .boton-actualizar {
   background-color: rgb(0, 120, 0);
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -533,6 +536,7 @@ p {
 .boton-miembro {
   background-color: rgb(0, 120, 0);
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -558,6 +562,7 @@ p {
 .boton-color1 {
   background-color: #03ff88;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #4B5563;
   font-size: 1.6rem;
   display: inline-block;
@@ -582,6 +587,7 @@ p {
 .boton-color2 {
   background-color: #037aff;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -606,6 +612,7 @@ p {
 .boton-color3 {
   background-color: #8803ff;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -630,6 +637,7 @@ p {
 .boton-color4 {
   background-color: #ff037a;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -654,6 +662,7 @@ p {
 .boton-color5 {
   background-color: #ff8803;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -678,6 +687,7 @@ p {
 .boton-color6 {
   background-color: #e74181;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -870,6 +880,7 @@ p {
 .login input[type=submit] {
   background-color: #0891B2;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -913,6 +924,7 @@ p {
 .crear input[type=submit] {
   background-color: #7C3AED;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -956,6 +968,7 @@ p {
 .olvide input[type=submit] {
   background-color: #DB2777;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -999,6 +1012,7 @@ p {
 .recuperar input[type=submit] {
   background-color: #2563EB;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -1089,6 +1103,7 @@ p {
 .dashboard .formulario input[type=submit] {
   background-color: #4338CA;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -1209,6 +1224,7 @@ p {
 .sidebar .cerrar-sesion-mobile .cerrar-sesion {
   background-color: #4338CA;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -1282,6 +1298,7 @@ p {
 .barra .cerrar-sesion {
   background-color: #28217b;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -1307,9 +1324,11 @@ p {
 }
 
 .barra-grupo {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(2, 1fr);
+  display: block;
+  justify-content: center;
+  padding: 1rem 2rem;
+  gap: 2rem;
+  margin-bottom: 1rem;
   background-color: #FFFFFF;
   box-shadow: 1px 12px 9px -13px #6b7280;
   place-items: center;
@@ -1318,14 +1337,14 @@ p {
   .barra-grupo {
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 @media (min-width: 1024px) {
   .barra-grupo {
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 @media (min-width: 1200px) {
@@ -1423,11 +1442,6 @@ p {
   display: none;
 }
 
-.barra-grupo {
-  padding: 1rem 2rem;
-  gap: 2rem;
-}
-
 .miembros-eliminar {
   margin-top: 5rem;
 }
@@ -1443,6 +1457,7 @@ p {
 .contenedor-nueva-tx .agregar-tx {
   background-color: #0891B2;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -1454,7 +1469,7 @@ p {
   width: 100%;
   border-radius: 0.5rem;
   border-radius: 0.5rem;
-  margin-top: 4rem;
+  margin-top: 3rem;
 }
 @media (min-width: 768px) {
   .contenedor-nueva-tx .agregar-tx {
@@ -1482,6 +1497,7 @@ p {
   padding: 0.5rem 2rem;
   border-bottom: 2px solid #e4e7eb;
   margin-bottom: 1rem;
+  gap: 2rem;
 }
 .listado-txs .tx:last-of-type {
   border-bottom: none;
@@ -1490,25 +1506,32 @@ p {
   font-size: 1.4rem;
   font-weight: bold;
 }
-.listado-txs .opciones {
-  display: flex;
+.listado-txs .opciones-mvtos {
+  display: grid;
   gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
 }
-.listado-txs .opciones button {
+@media (min-width: 768px) {
+  .listado-txs .opciones-mvtos {
+    display: flex;
+    gap: 1rem;
+  }
+}
+.listado-txs .opciones-mvtos button {
   border: none;
   font-size: 1.6rem;
   padding: 0.5rem 1rem;
   font-weight: 700;
   border-radius: 1rem;
 }
-.listado-txs .opciones button:hover {
+.listado-txs .opciones-mvtos button:hover {
   cursor: pointer;
 }
-.listado-txs .opciones .editar-mvto {
+.listado-txs .opciones-mvtos .editar-mvto {
   background-color: rgb(0, 120, 0);
   color: #FFFFFF;
 }
-.listado-txs .opciones .eliminar-mvto {
+.listado-txs .opciones-mvtos .eliminar-mvto {
   background-color: rgb(169, 0, 0);
   color: #FFFFFF;
 }
@@ -1563,6 +1586,7 @@ p {
 .modal .formulario .submit-nueva-tx {
   background-color: #2563EB;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -1586,6 +1610,7 @@ p {
 .modal .formulario .cerrar-modal {
   background-color: #F59E0B;
   padding: 1.5rem 4rem;
+  margin: 0.5rem;
   color: #FFFFFF;
   font-size: 1.6rem;
   display: inline-block;
@@ -1607,8 +1632,13 @@ p {
   cursor: pointer;
 }
 .modal .formulario .opciones {
-  display: flex;
-  justify-content: space-between;
+  display: block;
+}
+@media (min-width: 768px) {
+  .modal .formulario .opciones {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 .modal .formulario .cajas-para {
   display: flex;
@@ -1653,14 +1683,14 @@ p {
 
 .filtros {
   background-color: white;
+  display: block;
   margin-top: 2rem;
   border-radius: 1rem;
   padding: 2rem;
 }
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .filtros .filtros-inputs {
     display: flex;
-    justify-content: left;
     align-items: center;
     gap: 2rem;
   }
@@ -1674,32 +1704,36 @@ p {
   color: #4338CA;
   font-size: 2rem;
 }
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .filtros h2 {
     margin: 0;
   }
 }
 .filtros .campo {
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: block;
+  margin: 1rem 2rem 1rem 2rem;
   gap: 2rem;
-  margin-right: 2rem;
 }
 @media (min-width: 768px) {
   .filtros .campo {
-    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+@media (min-width: 1024px) {
+  .filtros .campo {
+    margin: 0;
+    gap: 0.5rem;
   }
 }
 .filtros .campo label {
   font-size: 1.5rem;
-  text-align: center;
   font-weight: bold;
   display: block;
+  padding: 1.5rem;
 }
 .filtros .campo select {
-  flex: 0.5;
   border: 1px solid #6b7280;
   padding: 0.5rem;
   border-radius: 1rem;
@@ -1801,6 +1835,20 @@ p {
   background-color: #fff;
 }
 
+.titulo-apartado {
+  font-size: 1.5rem;
+}
+@media (min-width: 768px) {
+  .titulo-apartado {
+    font-size: 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  .titulo-apartado {
+    font-size: 3rem;
+  }
+}
+
 .dashboard__grafica {
   place-items: center;
   width: 90%;
@@ -1812,10 +1860,6 @@ p {
     grid-template-columns: repeat(2, 1fr);
     width: 50%;
   }
-}
-.dashboard__grafica canvas {
-  margin-top: 3rem;
-  margin-right: 2rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1873,6 +1917,7 @@ p {
   .barra .cerrar-sesion {
     background-color: #F59E0B;
     padding: 1.5rem 4rem;
+    margin: 0.5rem;
     color: #FFFFFF;
     font-size: 1.6rem;
     display: inline-block;

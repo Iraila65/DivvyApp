@@ -2,29 +2,29 @@
     <!-- El botón modificar grupo sólo le aparece al propietario -->
     <?php if ($grupo->propietarioId == $_SESSION['id']) { ?>
         <a 
-            class="boton mod-grupo boton-<?php echo $grupo->color ?>" 
+            class="boton boton-acciones boton-<?php echo $grupo->color ?>" 
             href="/modificar-grupo?url=<?php echo $grupo->url ?>">
             Modificar grupo
         </a>
     <?php } ?>
     
     <a 
-        class="boton miembros boton-<?php echo $grupo->color ?>" 
+        class="boton boton-acciones boton-<?php echo $grupo->color ?>" 
         href="/miembros?url=<?php echo $grupo->url ?>">
         Miembros
     </a>
     <a 
-        class="boton movtos boton-<?php echo $grupo->color ?>" 
+        class="boton boton-acciones boton-<?php echo $grupo->color ?>" 
         href="/grupo?url=<?php echo $grupo->url ?>">
         Movimientos
     </a>
     <a 
-        class="boton deudas boton-<?php echo $grupo->color ?>" 
+        class="boton boton-acciones boton-<?php echo $grupo->color ?>" 
         href="/deudas?url=<?php echo $grupo->url ?>">
         Deudas
     </a>
     <a 
-        class="boton analisis boton-<?php echo $grupo->color ?>" 
+        class="boton boton-acciones boton-<?php echo $grupo->color ?>" 
         href="/analisis?url=<?php echo $grupo->url ?>">
         Análisis de gastos
     </a>

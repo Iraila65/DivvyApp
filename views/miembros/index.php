@@ -45,9 +45,16 @@
                                 <td class="table__td">
                                     <?php echo $miembro->usuario->email ?>
                                 </td>
-                                <td class="table__td peso-miembro" contenteditable="true">
+                                <td class="
+                                        table__td 
+                                        peso-miembro
+                                        <?php echo $miembro->saldo->gastos > 0 ? 'no-editable' : 'editable' ?>
+                                    " 
+                                    contenteditable="<?php echo $miembro->saldo->gastos > 0 ? 'false' : 'true' ?>"
+                                >
                                     <?php echo rtrim(rtrim(number_format($miembro->peso, 1), '0'), '.') ?>
                                 </td>
+                                
                                 <td class="table__td--acciones">
                                     <button class="table__accion table__accion--editar"  type="submit" 
                                         value="<?php echo $miembro->id; ?>">
@@ -55,6 +62,7 @@
                                         Cambiar peso
                                     </button>                                    
                                 </td>
+                                
                                 <td class="table_td">
                                     <input 
                                         class="usuario-id" 

@@ -54,17 +54,23 @@
 }
 
 .barra-grupo {
-    @include m.grid(2, 1rem);
+    
+    display: block;
+    justify-content: center;
+    padding: 1rem 2rem;
+    gap: 2rem;
+    margin-bottom: 1rem;
+
     background-color: v.$blanco;
     box-shadow: 1px 12px 9px -13px v.$gris;
     place-items: center;    
     
     @include m.tablet {
-        @include m.grid(3, 1rem);
+        @include m.grid(2, 1rem);
     }
 
     @include m.desktop {
-        @include m.grid(4, 1rem);
+        @include m.grid(3, 1rem);
     }
 
     @include m.xl_desktop {   

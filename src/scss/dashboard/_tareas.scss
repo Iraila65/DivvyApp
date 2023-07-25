@@ -8,7 +8,7 @@
     .agregar-tx {
         @include m.boton (v.$cyan, v.$blanco);
         border-radius: .5rem;
-        margin-top: 4rem;
+        margin-top: 3rem;
     }
 }
 
@@ -29,6 +29,7 @@
         padding: .5rem 2rem;
         border-bottom: 2px solid darken($color: v.$grisClaro, $amount: 5%);
         margin-bottom: 1rem;
+        gap: 2rem;
 
         &:last-of-type {
             border-bottom: none;
@@ -40,9 +41,14 @@
         } 
     }
 
-    .opciones {
-        display: flex;
-        gap: 1rem;
+    .opciones-mvtos {
+
+        @include m.grid(1, 1rem);
+
+        @include m.tablet{
+            display: flex;
+            gap: 1rem;
+        }
 
         button {
             border: none;

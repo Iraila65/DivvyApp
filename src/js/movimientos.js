@@ -991,7 +991,7 @@
                 `;
 
                 const opcionesDiv = document.createElement('DIV');
-                opcionesDiv.classList.add('opciones');
+                opcionesDiv.classList.add('opciones-mvtos');
 
                 const btnEditar = document.createElement('BUTTON');
                 btnEditar.classList.add('editar-mvto');
