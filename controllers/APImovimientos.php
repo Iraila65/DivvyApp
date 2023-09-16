@@ -30,7 +30,7 @@ class APImovimientos {
                 ];
                 echo json_encode($respuesta);   
             } else {
-                $movimientos = Movimiento::belongsTo('grupo_id', $grupo->id);
+                $movimientos = Movimiento::belongsToOrdenado('grupo_id', $grupo->id, 'fecha', 'DESC');
                 foreach($movimientos as $movimiento) {
                     $movimiento->miembro = Miembro::find($movimiento->miembro_id);
                     $movimiento->tipo_nombre = Tipo::find($movimiento->tipo)->nombre;

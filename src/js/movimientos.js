@@ -1,3 +1,16 @@
+import { contarDecimales, 
+        formatearImporte, 
+        validarNumeroDecimal, 
+        formatearFecha,
+        mostrarAlerta,
+        obtenerMiembros,
+        obtenerConceptos,
+        obtenerTipos,
+        obtenerGrupo,
+        obtenerSaldos,
+        imprimirDatos
+    } from "./funciones";
+
 (function() {
 
     const usuario = document.querySelector('.usuario-conectado');
@@ -36,11 +49,11 @@
     if (nuevaTxBtn) {
         async function iniciarApp() {
             const resultado = await Promise.all([
-                obtenerMiembros(), 
+                obtenerMiembros(urlgrupo.value), 
                 obtenerConceptos(),
                 obtenerTipos(),
                 obtenerGrupo(urlgrupo.value),
-                obtenerSaldos()
+                obtenerSaldos(urlgrupo.value)
             ]);
             miembros = await resultado[0];
             conceptos = await resultado[1];
@@ -67,61 +80,6 @@
             }
         }
         iniciarApp();    
-    }
-    
-    async function obtenerMiembros() {    
-        try {
-            const url = `/api/miembros-activos?url=${urlgrupo.value}`;
-            const respuesta = await fetch(url);
-            const resultado = await respuesta.json();
-            return resultado.miembros;
-        } catch (error) {
-            console.log(error);
-        }    
-    }
-
-    async function obtenerConceptos() {    
-        try {
-            const url = `/api/conceptos`;
-            const respuesta = await fetch(url);
-            const resultado = await respuesta.json();
-            return resultado.conceptos;
-        } catch (error) {
-            console.log(error);
-        }    
-    }
-
-    async function obtenerTipos() {    
-        try {
-            const url = `/api/tipos`;
-            const respuesta = await fetch(url);
-            const resultado = await respuesta.json();
-            return resultado.tipos;
-        } catch (error) {
-            console.log(error);
-        }    
-    }
-
-    async function obtenerGrupo(urlgrupo) {
-        try {
-            const url = `/api/grupo/getGrupo?url=${urlgrupo}`;
-            const respuesta = await fetch(url);
-            const resultado = await respuesta.json();
-            return resultado.grupo;
-        } catch (error) {
-            console.log(error);
-        }   
-    }
-
-    async function obtenerSaldos() {    
-        try {
-            const url = `/api/saldos?url=${urlgrupo.value}`;
-            const respuesta = await fetch(url);
-            const resultado = await respuesta.json();
-            return resultado.saldos;
-        } catch (error) {
-            console.log(error);
-        }    
     }
         
     function mostrarFormulario(editar = false, movimiento = {}) {  
@@ -415,70 +373,6 @@
         document.querySelector('.dashboard').appendChild(modal);  
     }
 
-    function validarNumeroDecimal(valor) {
-        // Expresión regular que verifica si el valor es numérico decimal
-        var regex = /^\d*([.,]?\d+)?$/;
-
-        if (valor == "") {
-            return false;
-        } else {
-            if (regex.test(valor)) {
-                // El valor es un número decimal válido
-                return true;
-            } else {
-                // El valor no es un número decimal válido
-                return false;
-            }
-        }
-    }
-
-    function formatearFecha(f) {
-        // Obtener los componentes de la fecha y hora del string
-        // f viene en formato "dd/mm/aaaa, hh:mm" el split genera una parte con el espacio después de la coma
-        var partes = f.split(/[\/,: ]/); // Dividir el string en partes usando "/", ":", "," y "espacio" como separadores
-        
-        var dia = partes[0];
-        var mes = partes[1];
-        var año = partes[2];
-        var hora = partes[4];
-        var minutos = partes[5];
-
-        // Crear un objeto Date con los componentes extraídos
-        var fec = new Date(año, mes - 1, dia, hora, minutos);
-       
-        // Obtener los componentes de la fecha
-        año = fec.getFullYear();
-        mes = fec.getMonth() + 1; // Los meses comienzan en 0, por lo tanto se suma 1
-        dia = fec.getDate();
-        hora = fec.getHours();
-        minutos = fec.getMinutes();
-
-        // Formatear los componentes de la fecha, agregando los ceros a la izquierda si hacen falta
-        if (mes < 10) mes = '0' + mes; 
-        if (dia < 10) dia = '0' + dia; 
-        if (hora < 10) hora = '0' + hora; 
-        if (minutos < 10) minutos = '0' + minutos; 
-
-        // Construir la cadena de fecha en el formato deseado
-        var fechaFormateada = año + '-' + mes + '-' + dia + ' ' + hora + ':' + minutos;
-        return fechaFormateada;
-    }
-
-    function mostrarAlerta(mensaje, tipo, referencia) {
-        const alertaPrevia = document.querySelector('.alerta');
-        if (alertaPrevia) {
-            alertaPrevia.remove();
-        }
-        const alerta = document.createElement('DIV');
-        alerta.classList.add('alerta', tipo);
-        alerta.textContent = mensaje;
-        referencia.parentElement.insertBefore(alerta, referencia.nextElementSibling);  
-        // Eliminar la alerta después de 5 segundos
-        setTimeout(() => {
-            alerta.remove();
-        }, 1500);
-    }
-
     function validarMovimiento(movimiento) {
         let validacion = true;
 
@@ -674,18 +568,14 @@
 
         // Identificamos si hay algún miembro con saldo distinto de cero
         mvtosficticios = [];
-        mayorSaldo = 0;
-        menorSaldo = 0;
-        mayorSaldo_id = 0;
-        menorSaldo_id = 0;
 
         // Necesito una copia "profunda" del array porque contiene objetos
-        saldosficticios = JSON.parse(JSON.stringify(saldos));
+        saldosficticios = JSON.parse(JSON.stringify(saldos));     
+        let haySaldos = comprobarSaldo(saldosficticios); 
         
-        let haySaldos = comprobarSaldo(saldosficticios);
-
         let movimientofic;
         let i = 0;
+
         while (haySaldos && i<100) {
             // generar movimiento saldar deuda
             if (Math.abs(mayorSaldo) > Math.abs(menorSaldo)) {
@@ -707,16 +597,12 @@
             }
             
             i++;
-            mayorSaldo = 0;
-            menorSaldo = 0;
-            mayorSaldo_id = 0;
-            menorSaldo_id = 0;
             haySaldos = comprobarSaldo(saldosficticios);
-            //imprimirDatos(mayorSaldo, mayorSaldo_id, menorSaldo, menorSaldo_id);
         }
 
         if (haySaldos) {
             console.log("Error de programación, saldar deudas ha entrado en un bucle");
+            imprimirDatos(haySaldos, mayorSaldo, mayorSaldo_id, menorSaldo, menorSaldo_id);
             return false;
         } else {
             return true;
@@ -829,7 +715,7 @@
             const resultado = await respuesta.json();
             if (resultado.tipo == 'exito') {
                 // Agregar el nuevo movimiento al listado global de movimientos
-                movimientos = [...movimientos, resultado.movimiento];
+                movimientos = [resultado.movimiento, ...movimientos];
             }
         } catch (error) {
             console.log(error);
@@ -1085,8 +971,12 @@
 
     function comprobarSaldo(sald) {
         let s = false;
+        mayorSaldo = 0;
+        menorSaldo = 0;
+        mayorSaldo_id = 0;
+        menorSaldo_id = 0;
         sald.forEach(saldo => {
-            if (Number(saldo.saldo) != 0) {
+            if (Number(saldo.saldo) != 0 && Math.abs(Number(saldo.saldo)) > 0.000001) {
                 s = true;
                 if (Number(saldo.saldo) > mayorSaldo) {
                     mayorSaldo = Number(saldo.saldo);
@@ -1101,23 +991,6 @@
         return s;
     }
 
-    function imprimirDatos(mayorSaldo, mayorSaldo_id, menorSaldo, menorSaldo_id) {
-        console.log("Mayor saldo");
-        console.log("Id: ");
-        console.log(mayorSaldo_id);
-        console.log("Saldo: ");
-        console.log(mayorSaldo);
-        console.log("Menor saldo");
-        console.log("Id: ");
-        console.log(menorSaldo_id);
-        console.log("Saldo: ");
-        console.log(menorSaldo);
-    }
-
-    function formatearImporte(imp, ndec) {
-        return parseFloat(parseFloat(imp).toFixed(ndec)).toString();
-    }
-
     // Función para encontrar un movimiento por su ID
     function encontrarMovimiento(id) {
         let movimientoEncontrado = movimientos.find(function(movimiento) {
@@ -1125,21 +998,6 @@
         });
     
         return movimientoEncontrado;
-    }
-
-    function contarDecimales(numero) {
-        const cadenaNumero = numero.toString(); // Convertir el número a una cadena de texto
-        const partes = cadenaNumero.split('.'); // Dividir la cadena en partes usando el punto decimal como separador
-        
-        // Si no hay parte decimal, el número no tiene decimales significativos
-        if (partes.length === 1 || partes[1] === '0') {
-          return 0;
-        }
-        
-        // Eliminar los ceros finales para obtener el número de decimales significativos
-        const decimales = partes[1].replace(/0+$/, '');
-        
-        return decimales.length;
     }
 
 })();

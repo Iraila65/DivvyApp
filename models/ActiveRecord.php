@@ -173,6 +173,15 @@ class ActiveRecord {
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
+
+    // Busca todos los registros por un campo determinado
+    // Devuelve un arreglo ordenado
+    public static function BelongsToOrdenado($colBelongs, $valor, $colOrden, $orden) {
+        $query = "SELECT * FROM " . static::$tabla  ." WHERE ".$colBelongs." = '".$valor."'"." ORDER BY ".$colOrden." ".$orden;
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
     // Devuelve un arreglo ordenado y limitado
     public static function ordenarLimit($columna, $orden, $limite) {
         $query = "SELECT * FROM " . static::$tabla  ." ORDER BY ".$columna." ".$orden." LIMIT ".$limite;

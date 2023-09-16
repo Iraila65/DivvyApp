@@ -27,20 +27,25 @@ class Router
         } else {
             $admin = null;
         }
+        if (isset($_SESSION['login'])) {
+            $user = true;
+        } else {
+            $user = false;
+        }
 
         // Arreglo de rutas protegidas...
         $rutas_protegidas = [
-            '/admin/dashboard', 
-            '/admin/ponentes', 
-            '/admin/ponentes/crear', 
-            '/admin/ponentes/editar', 
-            '/admin/ponentes/eliminar', 
-            '/admin/eventos',
-            '/admin/eventos/crear',
-            '/admin/eventos/editar',
-            '/admin/eventos/eliminar',
-            '/admin/registrados',
-            '/admin/regalos'
+            '/dashboard', 
+            '/crear-grupo', 
+            '/modificar-grupo', 
+            '/eliminar-grupo', 
+            '/grupo', 
+            '/deudas',
+            '/analisis',
+            '/perfil',
+            '/cambiar-pass',
+            '/miembros',
+            '/alta-miembro'
         ];
 
         // if ( isset ($_SERVER['PATH_INFO'] )){
@@ -82,8 +87,8 @@ class Router
         }
 
         // Proteger las rutas protegidas
-        if (in_array($currentUrl, $rutas_protegidas) && !$admin) {  
-            Header ('Location: /login');
+        if (in_array($currentUrl, $rutas_protegidas) && !$user) {  
+            Header ('Location: /');
         }
 
         if ($fn) {  // la url existe y tiene una función asociada
