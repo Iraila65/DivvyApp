@@ -559,7 +559,7 @@ import { contarDecimales,
             const resultado = await respuesta.json();
             if (resultado.tipo == 'exito') {
                 // Agregar el nuevo movimiento al listado global de movimientos
-                movimientos = [...movimientos, resultado.movimiento];
+                movimientos = [resultado.movimiento, ...movimientos];
             }
         } catch (error) {
             console.log(error);
