@@ -20,6 +20,7 @@ class Movimiento extends ActiveRecord {
     public $creador_id; 
     public $actualizado;
     public $actualizador_id; 
+    public $paraQuien;
     
 
     public function __construct($args = [])
@@ -36,6 +37,7 @@ class Movimiento extends ActiveRecord {
         if (!isset($args['creador_id'])) $args['creador_id']=0;
         if (!isset($args['actualizado'])) $args['actualizado']=null;
         if (!isset($args['actualizador_id'])) $args['actualizador_id']=null;
+        if (!isset($args['paraQuien'])) $args['paraQuien']=[];
         
         $this->id = $args['id'];
         $this->grupo_id = $args['grupo_id'];
@@ -50,6 +52,7 @@ class Movimiento extends ActiveRecord {
         $this->creador_id = $args['creador_id'];
         $this->actualizado = $args['actualizado'];
         $this->actualizador_id = $args['actualizador_id'];
+        $this->paraQuien = $args['paraQuien'];
         
     }
 

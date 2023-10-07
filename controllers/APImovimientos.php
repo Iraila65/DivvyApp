@@ -524,5 +524,262 @@ class APImovimientos {
         
     }
 
+    public static function saldos() {
+        isAuth();
+        
+        $url = $_GET['url'];
+        if (!$url) {
+            $respuesta = [
+                'tipo' => 'error',
+                'mensaje' => 'No se ha encontrado el Grupo'
+            ];
+            echo json_encode($respuesta);   
+        } else {
+            $grupo = Grupo::where('url', $url);
+            if (!$grupo) {
+                $respuesta = [
+                    'tipo' => 'error',
+                    'mensaje' => 'No se ha encontrado el Grupo'
+                ];
+                echo json_encode($respuesta);   
+            } else {
+                $datos = [
+                    'grupo_id' => $grupo->id
+                ];
+                // Obtenemos todos los movimientos
+                $movimientos = Movimiento::whereArray($datos);
+            
+                // Los ingresos los ponemos con importe negativo pues son devoluciones de gastos
+                $movimientos = array_map(function($movimiento) {
+                    if ($movimiento->tipo == 2) {
+                        $movimiento->cantidad = $movimiento->cantidad * (-1);
+                    }
+                    return $movimiento;
+                }, $movimientos);
+
+                // Obtenemos los miembros del grupo
+                $miembros = Miembro::whereArray($datos);
+
+                foreach($movimientos as $movimiento) {
+                    $arrayparaQuien = [];
+                    $arrayResultado = [];
+                    $total_pesos = 0;
+                    $paraquien = explode(",", $movimiento->quien);
+                    foreach($paraquien as $miembro_gasto) {
+                        $miembro = Miembro::find($miembro_gasto);
+                        settype($miembro->peso, "float");
+                        $total_pesos += $miembro->peso;
+                        settype($movimiento->cantidad, "float");
+                        $importe = $movimiento->cantidad * $miembro->peso;
+                        $datos_miembro = [
+                            'miembro_id' => $miembro_gasto,
+                            'nombre' => $miembro->nombre,
+                            'peso' => $miembro->peso,
+                            'importe' => $importe
+                        ];
+                        $arrayparaQuien[] = $datos_miembro;
+                    };
+                    $movimiento->total_pesos = $total_pesos;
+                    foreach($arrayparaQuien as $miembro_gasto) {
+                        $datos = [
+                            'miembro_id' => $miembro_gasto['miembro_id'],
+                            'nombre' => $miembro_gasto['nombre'],
+                            'peso' => $miembro_gasto['peso'],
+                            'importe' => $miembro_gasto['importe'] / $total_pesos
+                        ];
+                        $arrayResultado[] = $datos;
+                    };
+                    $movimiento->paraQuien = $arrayResultado;
+                }
+
+                // Construimos el array de saldos
+                $array_saldos = [];
+
+                foreach($miembros as $miembro) {
+                    $datos = [
+                        'miembro_id' => $miembro->id,
+                        'ingresos' => 0,
+                        'gastos' => 0,
+                        'saldo' => 0
+                    ];
+                    $array_saldos[] = $datos;
+                }
+
+                foreach($movimientos as $movimiento) {
+                    $array_saldos = actualizarSaldos($array_saldos, $movimiento);
+                }
+
+                foreach($array_saldos as &$saldo) {
+                    $saldo['ingresos'] = round( $saldo['ingresos'],6);
+                    $saldo['gastos'] = round( $saldo['gastos'],6);
+                    $saldo['saldo'] = round( $saldo['saldo'],6);
+                }
+    
+                echo json_encode([
+                    'saldos' => $array_saldos                    
+                ]);
+            }
+        }
+        
+    }
+
+
+    public static function deudas() {
+        isAuth();
+        
+        $url = $_GET['url'];
+        if (!$url) {
+            $respuesta = [
+                'tipo' => 'error',
+                'mensaje' => 'No se ha encontrado el Grupo'
+            ];
+            echo json_encode($respuesta);   
+        } else {
+            $grupo = Grupo::where('url', $url);
+            if (!$grupo) {
+                $respuesta = [
+                    'tipo' => 'error',
+                    'mensaje' => 'No se ha encontrado el Grupo'
+                ];
+                echo json_encode($respuesta);   
+            } else {
+                $datos = [
+                    'grupo_id' => $grupo->id
+                ];
+                // Obtenemos todos los movimientos
+                $movimientos = Movimiento::whereArray($datos);
+            
+                // Los ingresos los ponemos con importe negativo pues son devoluciones de gastos
+                $movimientos = array_map(function($movimiento) {
+                    if ($movimiento->tipo == 2) {
+                        $movimiento->cantidad = $movimiento->cantidad * (-1);
+                    }
+                    return $movimiento;
+                }, $movimientos);
+
+                // Obtenemos los miembros del grupo
+                $miembros = Miembro::whereArray($datos);
+
+                foreach($movimientos as $movimiento) {
+                    $arrayparaQuien = [];
+                    $arrayResultado = [];
+                    $total_pesos = 0;
+                    $paraquien = explode(",", $movimiento->quien);
+                    foreach($paraquien as $miembro_gasto) {
+                        $miembro = Miembro::find($miembro_gasto);
+                        settype($miembro->peso, "float");
+                        $total_pesos += $miembro->peso;
+                        settype($movimiento->cantidad, "float");
+                        $importe = $movimiento->cantidad * $miembro->peso;
+                        $datos_miembro = [
+                            'miembro_id' => $miembro_gasto,
+                            'nombre' => $miembro->nombre,
+                            'peso' => $miembro->peso,
+                            'importe' => $importe
+                        ];
+                        $arrayparaQuien[] = $datos_miembro;
+                    };
+                    $movimiento->total_pesos = $total_pesos;
+                    foreach($arrayparaQuien as $miembro_gasto) {
+                        $datos = [
+                            'miembro_id' => $miembro_gasto['miembro_id'],
+                            'nombre' => $miembro_gasto['nombre'],
+                            'peso' => $miembro_gasto['peso'],
+                            'importe' => $miembro_gasto['importe'] / $total_pesos
+                        ];
+                        $arrayResultado[] = $datos;
+                    };
+                    $movimiento->paraQuien = $arrayResultado;
+                }
+
+                // Construimos el array de saldos
+                $array_saldos = [];
+
+                foreach($miembros as $miembro) {
+                    $datos = [
+                        'miembro_id' => $miembro->id,
+                        'ingresos' => 0,
+                        'gastos' => 0,
+                        'saldo' => 0
+                    ];
+                    $array_saldos[] = $datos;
+                }
+
+                foreach($movimientos as $movimiento) {
+                    $array_saldos = actualizarSaldos($array_saldos, $movimiento);
+                }
+
+                foreach($array_saldos as &$saldo) {
+                    $saldo['ingresos'] = round( $saldo['ingresos'],6);
+                    $saldo['gastos'] = round( $saldo['gastos'],6);
+                    $saldo['saldo'] = round( $saldo['saldo'],6);
+                }
+
+                // Construimos el array de deudas, generando movimientos ficticios hasta que todos
+                // los saldos sean cero
+                $array_deudas = [];
+
+                $mvtosficticios = [];
+
+                // Identificamos si hay algún miembro con saldo distinto de cero
+                $comprobacion = comprobarSaldo($array_saldos); 
+                    
+                $i = 0;
+
+                while ($comprobacion['haySaldos'] && $i<100) {
+                    // generar movimiento saldar deuda
+                    if (abs($comprobacion['mayorSaldo']) > abs($comprobacion['menorSaldo'])) {
+                        $cantidad_a_saldar = abs($comprobacion['menorSaldo']);
+                    } else {
+                        $cantidad_a_saldar = abs($comprobacion['mayorSaldo']);
+                    }
+
+                    if (round($cantidad_a_saldar,6) > 0.000001 && $comprobacion['menorSaldo_id'] !=0 && $comprobacion['mayorSaldo_id'] !=0) {
+                        
+                        // genero movimiento desde menorSaldo_id a mayorSaldo_id
+                        $mvtofic = new Movimiento ();
+                        $mvtofic->miembro_id = $comprobacion['menorSaldo_id'];
+                        $mvtofic->cantidad = $cantidad_a_saldar;
+                        $mvtofic->tipo = 3;
+                        $paraquien = [
+                            'miembro_id' => $comprobacion['mayorSaldo_id'],
+                            'importe' => $cantidad_a_saldar
+                        ];
+                        $mvtofic->paraQuien[] = $paraquien;
+                        $mvtosficticios[] = $mvtofic;
+                        
+                        $array_saldos = actualizarSaldos($array_saldos, $mvtofic);
+                        $comprobacion = comprobarSaldo($array_saldos);
+                    }
+                        
+                    $i++;   
+                }
+
+                if ($comprobacion['haySaldos']) {
+                    echo json_encode(([
+                        'error' => "Error de programación, saldar deudas ha entrado en un bucle",
+                        'datos' => $comprobacion,
+                        'mvtosficticios' => $mvtosficticios,
+                        'i' => $i,
+                        'array_saldos' => $array_saldos
+                    ]));
+                } else {
+                    foreach($mvtosficticios as $mvto) {
+                        $deuda = [
+                            'grupo_id' => $grupo->id,
+                            'from_miembro_id' => $mvto->miembro_id,
+                            'to_miembro_id' => $mvto->paraQuien[0]['miembro_id'],
+                            'importe' => $mvto->cantidad
+                        ];
+                        $array_deudas[] = $deuda;
+                    };
+                    echo json_encode([
+                        'deudas' => $array_deudas                  
+                    ]);
+                }
+            }
+        }
+        
+    }
     
 }

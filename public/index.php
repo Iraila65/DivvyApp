@@ -75,6 +75,8 @@ $router->post('/api/movimiento/crear', [APImovimientos::class, 'crear']);
 $router->post('/api/movimiento/actualizar', [APImovimientos::class, 'actualizar']);
 $router->post('/api/movimiento/eliminar', [APImovimientos::class, 'eliminar']);
 $router->get('/api/movimientos/gastos', [APImovimientos::class, 'gastos']);
+$router->get('/api/movimientos/saldos', [APImovimientos::class, 'saldos']);
+$router->get('/api/movimientos/deudas', [APImovimientos::class, 'deudas']);
 
 // APIs para los saldos
 $router->get('/api/saldos', [APIsaldos::class, 'index']);
